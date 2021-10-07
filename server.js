@@ -2,11 +2,16 @@ require('dotenv').config();
 require('colors');
 const express = require('express');
 const morgan = require('morgan');
-const connectDB = require('./config/db');
 const app = express();
+
+const errorHandler = require('./middleware/error');
+const connectDB = require('./config/db');
 
 // Connect database
 connectDB();
+
+// body parser
+app.use(express.json());
 
 // routes
 const bootcamps = require('./routes/bootcamps');
@@ -23,6 +28,8 @@ app.get('/', (req, res) => {
 
 // mount routes
 app.use('/api/v1/bootcamps', bootcamps);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
