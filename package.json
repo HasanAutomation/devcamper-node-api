@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "seeder:delete": "node seeder -d",
+    "seeder:insert": "node seeder"
   },
   "author": "Hasan Ali",
   "license": "ISC",
