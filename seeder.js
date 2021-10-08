@@ -19,7 +19,7 @@ async function insertBootcamps() {
         ...bootcamp,
       };
     });
-    await Bootcamp.insertMany(addedBootcamps);
+    await Bootcamp.create(addedBootcamps);
     console.log('INSERTED'.green.bold);
     process.exit();
   } catch (err) {
