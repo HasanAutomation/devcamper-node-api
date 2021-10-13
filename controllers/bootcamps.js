@@ -13,7 +13,21 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
     /\b(gt|gte|lt|lte|in)\b/g,
     match => `$${match}`
   );
+  let selectValues;
+
   query = Bootcamp.find(JSON.parse(queryString));
+
+  // select
+  if (req.query.select) {
+    selectValues = req.query.select.split(',').join(' ');
+    query = query.select(selectValues);
+  }
+
+  // sorting
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    query = query.sort(sortBy);
+  }
 
   const bootcamps = await query;
   res
@@ -96,5 +110,4 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
     count: bootcamps.length,
     data: bootcamps,
   });
-  next;
 });
