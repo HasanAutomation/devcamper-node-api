@@ -36,7 +36,9 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
   const endIndex = page * limit;
   const total = await Bootcamp.countDocuments();
 
-  const pagination = {};
+  const pagination = {
+    current: page,
+  };
   if (endIndex < total) {
     pagination.next = {
       page: page + 1,
@@ -102,13 +104,14 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/bootcamps/:id
 // @access private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp with id ${req.params.id} is not found`, 404)
     );
   }
-  res.status(200).json({ success: true });
+  bootcamp.remove();
+  res.status(200).json({ success: true, data: null });
 });
 
 // @desc Get bootcamp within a radius
