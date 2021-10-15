@@ -23,7 +23,7 @@ async function insertBootcamps() {
     });
     await Bootcamp.create(addedBootcamps);
     console.log('BOOTCAMPS INSERTED'.green.bold);
-    await insertCourses();
+    // await insertCourses();
     process.exit();
   } catch (err) {
     console.log(err.message);
