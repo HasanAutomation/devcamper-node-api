@@ -8,60 +8,7 @@ const geocoder = require('../utils/geocode');
 // @route GET /api/v1/bootcamps
 // @access private
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-  let query;
-
-  const queryString = JSON.stringify(req.query).replace(
-    /\b(gt|gte|lt|lte|in)\b/g,
-    match => `$${match}`
-  );
-  let selectValues;
-
-  query = Bootcamp.find(JSON.parse(queryString)).populate('courses');
-
-  // select
-  if (req.query.select) {
-    selectValues = req.query.select.split(',').join(' ');
-    query = query.select(selectValues);
-  }
-
-  // sorting
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    query = query.sort(sortBy);
-  }
-
-  // pagination
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Bootcamp.countDocuments();
-
-  const pagination = {
-    current: page,
-  };
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  query = query.limit(limit).skip(startIndex);
-
-  const bootcamps = await query;
-  res.status(200).json({
-    success: true,
-    count: bootcamps.length,
-    pagination,
-    data: bootcamps,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get Single bootcamp

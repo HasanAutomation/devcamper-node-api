@@ -29,17 +29,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/courses
 // @access private
 exports.getCourses = asyncHandler(async (req, res, next) => {
-  //   const courses = await Course.find().populate('bootcamp');
-  const courses = await Course.find().populate({
-    path: 'bootcamp',
-    select: 'name',
-  });
-
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc Get Single course by id
