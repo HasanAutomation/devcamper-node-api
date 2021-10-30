@@ -2,6 +2,7 @@ require('dotenv').config();
 require('colors');
 const express = require('express');
 const morgan = require('morgan');
+const fileupload = require('express-fileupload');
 const app = express();
 
 const errorHandler = require('./middleware/error');
@@ -12,6 +13,12 @@ connectDB();
 
 // body parser
 app.use(express.json());
+app.use('/public', express.static('public'));
+app.use(
+  fileupload({
+    limits: { fileSize: process.env.MAX_FILE_UPLOAD },
+  })
+);
 
 // routes
 const bootcamps = require('./routes/bootcamps');
